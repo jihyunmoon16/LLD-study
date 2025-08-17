@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class ParkingLotMain {
     public static void main(String[] args) throws InterruptedException {
+        // initialize parking spots
         ParkingSpot psCar = new ParkingSpot(0, VehicleType.CAR);
         ParkingSpot psBike = new ParkingSpot(1, VehicleType.BIKE);
         ParkingSpot psTruck = new ParkingSpot(2, VehicleType.TRUCK);
@@ -15,31 +16,48 @@ public class ParkingLotMain {
         parkingSpots.add(psBike);
         parkingSpots.add(psTruck);
 
-        // Initialize parking lot
+
+        // initialize parking lot
         ParkingLot parkingLot = new ParkingLot(parkingSpots);
+
+        // initialize gates
+        EntranceGate entranceGate1 = new EntranceGate(1, "North Gate", parkingLot);
+        EntranceGate entranceGate2 = new EntranceGate(2, "South Gate", parkingLot);
+
+        ExitGate exitGate1 = new ExitGate(1, "North Exit", parkingLot);
+        ExitGate exitGate2 = new ExitGate(2, "South Exit", parkingLot);
+
+        // register observer
+        Dashboard dashboard = new Dashboard(parkingLot);
+        entranceGate1.registerObserver(dashboard);
+        entranceGate2.registerObserver(dashboard);
 
         // Get vehicle info from user
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter License Plate Number: ");
         String licensePlateNumber = sc.nextLine();
 
-        System.out.print("Enter Vehicle Type (CAR / BIKE / TRUCK): ");
-        String vehicleType = sc.nextLine().trim().toUpperCase();
+        VehicleType type = null;
 
-        Vehicle v1 = new Vehicle(licensePlateNumber, VehicleType.valueOf(vehicleType));
+        while (type == null) {
+            System.out.print("Enter Vehicle Type (CAR / BIKE / TRUCK): ");
+            String vehicleType = sc.nextLine().trim().toUpperCase();
 
-        // Park vehicle
-        ParkingTicket ticket = parkingLot.parkVehicle(v1.getVehicleType());
-        System.out.println("Vehicle parked. Ticket ID: " + ticket.getId());
+            try {
+                type = VehicleType.valueOf(vehicleType); // 유효한 enum인지 확인
+            } catch (IllegalArgumentException e) {
+                System.out.println("❌ Invalid vehicle type. Please enter CAR, BIKE, or TRUCK.");
+            }
+        }
+
+        Vehicle v1 = new Vehicle(licensePlateNumber, type);
+
+        // Park Vehicle
+        Ticket ticket = entranceGate1.allowEntry(v1);
 
         Thread.sleep(100000);
 
         // Payment
-        Payment payment = new Payment();
-        payment.processPayment(ticket);
-
-        // Unpark vehicle
-        parkingLot.unparkVehicle(ticket);
-        System.out.println("Vehicle unparked successfully.");
+        exitGate1.takePayment(new CashStrategy(), ticket);
     }
 }

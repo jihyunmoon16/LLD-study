@@ -6,9 +6,12 @@ public class ParkingSpot {
     private int id;
     private boolean isOccupied;
     private VehicleType vehicleType;
-    private ParkingTicket ticket;
+    private Ticket ticket;
 
-    public ParkingSpot() {};
+    public ParkingSpot() {
+    }
+
+    ;
 
     public ParkingSpot(int id, VehicleType vehicleType) {
         this.id = id;
@@ -24,19 +27,24 @@ public class ParkingSpot {
         return isOccupied;
     }
 
-    public VehicleType getVehicleType() {
+    public VehicleType getSpotType() {
         return vehicleType;
     }
 
-    public ParkingTicket parkVehicle(){
+    public Ticket parkVehicle(Vehicle v) {
         this.isOccupied = true;
-        this.ticket = new ParkingTicket(id, LocalDateTime.now(), this);
+        // spot id를 리턴하는 걸로 수정
+        this.ticket = new Ticket(this.id, LocalDateTime.now(), v.getLicensePlateNumber());
         return ticket;
-    };
+    }
 
-    public void unparkVehicle(){
+    ;
+
+    public void unparkVehicle() {
         this.isOccupied = false;
         this.ticket = null;
         System.out.println("successfully unparked vehicle");
-    };
+    }
+
+    ;
 }
