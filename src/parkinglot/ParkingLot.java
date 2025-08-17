@@ -13,9 +13,11 @@ public class ParkingLot {
     }
 
     public Ticket parkVehicle(Vehicle v) {
-        for (ParkingSpot spot : spots) {
-            if (!spot.isOccupied() && spot.getSpotType().equals(v.getVehicleType())) {
-                return spot.parkVehicle(v);
+        synchronized (this) {
+            for (ParkingSpot spot : spots) {
+                if (!spot.isOccupied() && spot.getSpotType().equals(v.getVehicleType())) {
+                    return spot.parkVehicle(v);
+                }
             }
         }
         System.out.println("ParkingLot is full");
