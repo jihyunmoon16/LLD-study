@@ -1,8 +1,8 @@
 package tictactoe;
 
 public class Player {
-    private String name;
-    private Symbol symbol;
+    private final String name;
+    private final Symbol symbol;
 
     public Player(String name, Symbol symbol) {
         this.name = name;
