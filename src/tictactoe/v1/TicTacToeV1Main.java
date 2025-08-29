@@ -1,8 +1,8 @@
-package tictactoe;
+package tictactoe.v1;
 
 import java.util.Scanner;
 
-public class TicTacToeMain {
+public class TicTacToeV1Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome to TicTacToe");

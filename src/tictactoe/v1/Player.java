@@ -1,4 +1,4 @@
-package tictactoe;
+package tictactoe.v1;
 
 public class Player {
     private final String name;
